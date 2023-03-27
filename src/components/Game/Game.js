@@ -17,17 +17,22 @@ function Game() {
   function handleGuessResult(guess) {
     console.log(`guess: ${guess}`);
     const nextGuess = {
-      guess,
+      value: guess,
       id: crypto.randomUUID(),
     }
     const nextGuessResults = [...guessResults, nextGuess];
     setGuessResults(nextGuessResults);
+    console.log("Guess Results", nextGuessResults);
   }
 
   return (
     <>
-      <GuessInput guess={guess} setGuess={setGuess} handleGuessResult={handleGuessResult} />
       <GuessResults guessResults={guessResults} />
+      <GuessInput
+        guess={guess}
+        setGuess={setGuess}
+        handleGuessResult={handleGuessResult}
+      />
     </>
   );
 }
