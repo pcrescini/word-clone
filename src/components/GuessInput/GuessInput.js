@@ -1,6 +1,13 @@
 import React from "react";
 
-function GuessInput({ guess, setGuess, handleGuessResult, handleCheckGuess }) {
+function GuessInput({
+  guess,
+  setGuess,
+  handleGuessResult,
+  handleCheckGuess,
+  handleEndBanner,
+  isGameOver
+}) {
   return (
     <>
       <form
@@ -9,6 +16,7 @@ function GuessInput({ guess, setGuess, handleGuessResult, handleCheckGuess }) {
           event.preventDefault();
           handleGuessResult(guess);
           handleCheckGuess(guess);
+          handleEndBanner(guess);
           setGuess("");
         }}
       >
@@ -20,6 +28,7 @@ function GuessInput({ guess, setGuess, handleGuessResult, handleCheckGuess }) {
           maxLength={5}
           value={guess}
           onChange={(event) => setGuess(event.target.value.toUpperCase())}
+          disabled={isGameOver}
         />
       </form>
     </>

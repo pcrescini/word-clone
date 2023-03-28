@@ -12,11 +12,11 @@ function Guess({ value, status }) {
       {range(5).map((num) => (
         <span
           key={num}
-          className={`cell ${
+          className={
             guessResultsWordStatus
-              ? guessResultsWordStatus[num].status
-              : undefined
-          }`}
+              ? `cell ${guessResultsWordStatus[num].status}`
+              : 'cell'
+          }
         >
           {guessResultsWord ? guessResultsWord[num] : undefined}
         </span>

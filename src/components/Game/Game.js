@@ -1,6 +1,7 @@
 import React from "react";
 import GuessInput from "../GuessInput/GuessInput";
 import GuessResults from "../GuessResults";
+import Banner from "../Banner";
 
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
@@ -15,6 +16,9 @@ function Game() {
   const [guess, setGuess] = React.useState("");
   const [guessResults, setGuessResults] = React.useState([]);
   const [checkedGuesses, setCheckedGuesses] = React.useState([]);
+  const [numOfGuesses, setNumOfGuesses] = React.useState(0);
+  const [isCorrect, setIsCorrect] = React.useState(false);
+  const [isGameOver, setIsGameOver] = React.useState(false);
 
   function handleGuessResult(guess) {
     console.log(`guess: ${guess}`);
@@ -28,18 +32,46 @@ function Game() {
 
   function handleCheckGuess(guess) {
     const checkedGuess = checkGuess(guess, answer);
-    const nextCheckedGuess = [...checkedGuesses, checkedGuess]
+    const nextCheckedGuess = [...checkedGuesses, checkedGuess];
     setCheckedGuesses(nextCheckedGuess);
+  }
+
+  function handleEndBanner(guess) {
+    setIsCorrect((guess === answer));
+    setIsGameOver((guess === answer));
+
+    const nextNumOfGuesses = numOfGuesses + 1;
+    setNumOfGuesses(nextNumOfGuesses);
+
+    if (
+      (!isCorrect && nextNumOfGuesses === 6) ||
+      (isCorrect && nextNumOfGuesses <= 6)
+    ) {
+      setIsGameOver(true);
+    }
   }
 
   return (
     <>
-      <GuessResults guessResults={guessResults} checkedGuesses={checkedGuesses} />
+      <GuessResults
+        guessResults={guessResults}
+        checkedGuesses={checkedGuesses}
+        answer={answer}
+      />
       <GuessInput
         guess={guess}
         setGuess={setGuess}
         handleGuessResult={handleGuessResult}
         handleCheckGuess={handleCheckGuess}
+        handleEndBanner={handleEndBanner}
+        isGameOver={isGameOver}
+        isCorrect={isCorrect}
+      />
+      <Banner
+        numOfGuesses={numOfGuesses}
+        answer={answer}
+        isCorrect={isCorrect}
+        isGameOver={isGameOver}
       />
     </>
   );
