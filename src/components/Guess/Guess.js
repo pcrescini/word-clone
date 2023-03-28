@@ -2,13 +2,22 @@ import React from "react";
 
 import { range } from "../../utils";
 
-function Guess({ value }) {
-  // sset variable as undefined if guessResults array is empty using optional chaining operator
+function Guess({ value, status }) {
+  // sets variable as undefined using optional chaining operator if guessResults array is empty
   const guessResultsWord = value?.value;
+  const guessResultsWordStatus = status;
+
   return (
     <p className="guess">
       {range(5).map((num) => (
-        <span key={num} className="cell">
+        <span
+          key={num}
+          className={`cell ${
+            guessResultsWordStatus
+              ? guessResultsWordStatus[num].status
+              : undefined
+          }`}
+        >
           {guessResultsWord ? guessResultsWord[num] : undefined}
         </span>
       ))}

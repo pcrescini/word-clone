@@ -1,6 +1,6 @@
 import React from "react";
 
-function GuessInput({ guess, setGuess, handleGuessResult }) {
+function GuessInput({ guess, setGuess, handleGuessResult, handleCheckGuess }) {
   return (
     <>
       <form
@@ -8,6 +8,7 @@ function GuessInput({ guess, setGuess, handleGuessResult }) {
         onSubmit={(event) => {
           event.preventDefault();
           handleGuessResult(guess);
+          handleCheckGuess(guess);
           setGuess("");
         }}
       >
