@@ -1,11 +1,13 @@
 import React from "react";
 import GuessInput from "../GuessInput/GuessInput";
 import GuessResults from "../GuessResults";
-import Banner from "../Banner";
+import WonBanner from "../WonBanner";
+import LostBanner from "../LostBanner";
 
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
 import { checkGuess } from "../../game-helpers";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -13,12 +15,11 @@ const answer = sample(WORDS);
 console.info({ answer });
 
 function Game() {
-  const [guess, setGuess] = React.useState("");
   const [guessResults, setGuessResults] = React.useState([]);
   const [checkedGuesses, setCheckedGuesses] = React.useState([]);
   const [numOfGuesses, setNumOfGuesses] = React.useState(0);
-  const [isCorrect, setIsCorrect] = React.useState(false);
-  const [isGameOver, setIsGameOver] = React.useState(false);
+  // running / won / lost
+  const [gameStatus, setGameStatus] = React.useState('running');
 
   function handleGuessResult(guess) {
     console.log(`guess: ${guess}`);
@@ -28,27 +29,21 @@ function Game() {
     };
     const nextGuessResults = [...guessResults, nextGuess];
     setGuessResults(nextGuessResults);
+
+    const nextNumOfGuesses = numOfGuesses + 1;
+    setNumOfGuesses(nextNumOfGuesses);
+
+    if (guess.toUpperCase() === answer) {
+      setGameStatus('won');
+    } else if (nextGuessResults.length >= NUM_OF_GUESSES_ALLOWED) {
+      setGameStatus("lost");
+    }
   }
 
   function handleCheckGuess(guess) {
     const checkedGuess = checkGuess(guess, answer);
     const nextCheckedGuess = [...checkedGuesses, checkedGuess];
     setCheckedGuesses(nextCheckedGuess);
-  }
-
-  function handleEndBanner(guess) {
-    setIsCorrect((guess === answer));
-    setIsGameOver((guess === answer));
-
-    const nextNumOfGuesses = numOfGuesses + 1;
-    setNumOfGuesses(nextNumOfGuesses);
-
-    if (
-      (!isCorrect && nextNumOfGuesses === 6) ||
-      (isCorrect && nextNumOfGuesses <= 6)
-    ) {
-      setIsGameOver(true);
-    }
   }
 
   return (
@@ -59,20 +54,12 @@ function Game() {
         answer={answer}
       />
       <GuessInput
-        guess={guess}
-        setGuess={setGuess}
         handleGuessResult={handleGuessResult}
         handleCheckGuess={handleCheckGuess}
-        handleEndBanner={handleEndBanner}
-        isGameOver={isGameOver}
-        isCorrect={isCorrect}
+        gameStatus={gameStatus}
       />
-      <Banner
-        numOfGuesses={numOfGuesses}
-        answer={answer}
-        isCorrect={isCorrect}
-        isGameOver={isGameOver}
-      />
+      {gameStatus === 'won' && <WonBanner numOfGuesses={numOfGuesses} />}
+      {gameStatus === 'lost' && <LostBanner answer={answer} />}
     </>
   );
 }
