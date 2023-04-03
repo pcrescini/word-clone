@@ -128,16 +128,19 @@ h1 {
   background: var(--color-success);
   border-color: var(--color-success);
   color: white;
+  animation: flip 500ms ease forwards;
 }
 .cell.incorrect {
   background: var(--color-gray-300);
   border-color: var(--color-gray-300);
   color: white;
+  animation: flip 500ms ease forwards;
 }
 .cell.misplaced {
   background: var(--color-warning);
   border-color: var(--color-warning);
   color: white;
+  animation: flip 500ms ease forwards;
 }
 
 .guess-input-wrapper {
@@ -228,5 +231,17 @@ h1 {
   }
   to {
     transform: translateY(0%);
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
   }
 }

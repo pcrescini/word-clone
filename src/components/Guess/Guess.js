@@ -14,9 +14,10 @@ function Guess({ value, status }) {
           key={num}
           className={
             guessResultsWordStatus
-              ? `cell ${guessResultsWordStatus[num].status}`
-              : 'cell'
+              ? `cell ${guessResultsWordStatus[num].status} flip`
+              : "cell"
           }
+          style={{animationDelay: `${num * 150}ms`}}
         >
           {guessResultsWord ? guessResultsWord[num] : undefined}
         </span>
