@@ -11,11 +11,14 @@ function LostBanner({ answer, handleGameRestart }) {
 
   return (
     <Banner status='sad'>
-      <form onSubmit={handleGameRestart}>
+      <form onSubmit={event => {
+        event.preventDefault();
+        handleGameRestart();
+      }}>
         <p>
           Sorry, the correct answer is <strong>{answer}</strong>.
         </p>
-        <button ref={buttonRef}>Restart game?</button>
+        <button type="submit" ref={buttonRef}>Restart game?</button>
       </form>
     </Banner>
   );

@@ -11,7 +11,12 @@ function WonBanner({ numOfGuesses, handleGameRestart }) {
 
   return (
     <Banner status='happy'>
-      <form onSubmit={handleGameRestart}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleGameRestart();
+        }}
+      >
         <p>
           <strong>Congratulations!</strong> You got it in{' '}
           <strong>
@@ -19,7 +24,9 @@ function WonBanner({ numOfGuesses, handleGameRestart }) {
           </strong>
           .
         </p>
-        <button ref={buttonRef}>Restart game?</button>
+        <button type='submit' ref={buttonRef}>
+          Restart game?
+        </button>
       </form>
     </Banner>
   );

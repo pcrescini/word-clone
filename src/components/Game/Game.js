@@ -9,18 +9,19 @@ import { WORDS } from '../../data';
 import { checkGuess } from '../../game-helpers';
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
 function Game() {
+  // Picks a random word on every pageload.
   const [gameWord, setGameWord] = React.useState(() => sample(WORDS));
   const [guessResults, setGuessResults] = React.useState([]);
   const [checkedGuesses, setCheckedGuesses] = React.useState([]);
   const [numOfGuesses, setNumOfGuesses] = React.useState(0);
   // running / won / lost
   const [gameStatus, setGameStatus] = React.useState('running');
+
+  React.useEffect(() => {
+    // Loggin solution in the console to make debugging easier.
+    console.info({ gameWord });
+  }, [gameWord]);
 
   function handleGuessResult(guess) {
     console.log(`guess: ${guess}`);
@@ -49,7 +50,6 @@ function Game() {
 
   function handleGameRestart() {
     const nextAnswer = sample(WORDS);
-    console.info({ nextAnswer });
     setGameWord(nextAnswer);
     setGuessResults([]);
     setCheckedGuesses([]);
