@@ -6,75 +6,52 @@ import LostBanner from '../LostBanner';
 
 import { sample } from '../../utils';
 import { WORDS } from '../../data';
-import { checkGuess } from '../../game-helpers';
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 
 function Game() {
-  const [gameWord, setGameWord] = React.useState(() => sample(WORDS)); // Picks a random word on every pageload.
-  const [guessResults, setGuessResults] = React.useState([]);
-  const [checkedGuesses, setCheckedGuesses] = React.useState([]);
-  const [numOfGuesses, setNumOfGuesses] = React.useState(0);
+  const [answer, setAnswer] = React.useState(() => sample(WORDS)); // Picks a random word on every pageload.
   const [gameStatus, setGameStatus] = React.useState('running'); // running / won / lost
+  const [guesses, setGuesses] = React.useState([]);
 
   // Logging solution in the console to make debugging easier.
   React.useEffect(() => {
-    console.info({ gameWord });
-  }, [gameWord]);
+    console.log({ answer });
+  }, [answer]);
 
-  function handleGuessResult(guess) {
-    console.log(`guess: ${guess}`);
-    const nextGuess = {
-      value: guess,
-      id: crypto.randomUUID(),
-    };
-    const nextGuessResults = [...guessResults, nextGuess];
-    setGuessResults(nextGuessResults);
+  function handleSubmitGuess(tentativeGuess) {
+    console.log(`Your guess: ${tentativeGuess}`);
+    const nextGuesses = [...guesses, tentativeGuess];
+    setGuesses(nextGuesses);
 
-    const nextNumOfGuesses = numOfGuesses + 1;
-    setNumOfGuesses(nextNumOfGuesses);
-
-    if (guess.toUpperCase() === gameWord) {
+    if (tentativeGuess.toUpperCase() === answer) {
       setGameStatus('won');
-    } else if (nextGuessResults.length >= NUM_OF_GUESSES_ALLOWED) {
+    } else if (nextGuesses.length >= NUM_OF_GUESSES_ALLOWED) {
       setGameStatus('lost');
     }
   }
 
-  function handleCheckGuess(guess) {
-    const checkedGuess = checkGuess(guess, gameWord);
-    const nextCheckedGuess = [...checkedGuesses, checkedGuess];
-    setCheckedGuesses(nextCheckedGuess);
-  }
-
   function handleGameRestart() {
     const nextAnswer = sample(WORDS);
-    setGameWord(nextAnswer);
-    setGuessResults([]);
-    setCheckedGuesses([]);
-    setNumOfGuesses(0);
+    setAnswer(nextAnswer);
+    setGuesses([]);
     setGameStatus('running');
   }
 
   return (
     <>
-      <GuessResults
-        guessResults={guessResults}
-        checkedGuesses={checkedGuesses}
-        answer={gameWord}
-      />
+      <GuessResults guesses={guesses} answer={answer} />
       <GuessInput
-        handleGuessResult={handleGuessResult}
-        handleCheckGuess={handleCheckGuess}
+        handleSubmitGuess={handleSubmitGuess}
         gameStatus={gameStatus}
       />
       {gameStatus === 'won' && (
         <WonBanner
-          numOfGuesses={numOfGuesses}
+          numOfGuesses={guesses.length}
           handleGameRestart={handleGameRestart}
         />
       )}
       {gameStatus === 'lost' && (
-        <LostBanner answer={gameWord} handleGameRestart={handleGameRestart} />
+        <LostBanner answer={answer} handleGameRestart={handleGameRestart} />
       )}
     </>
   );

@@ -1,29 +1,32 @@
 import React from 'react';
-
+import { checkGuess } from '../../game-helpers';
 import { range } from '../../utils';
 
-function Guess({ value, status }) {
-  // sets variable as undefined using optional chaining operator if guessResults array is empty
-  const guessResultsWord = value?.value;
-  const guessResultsWordStatus = status;
+const Guess = React.memo(function Guess({ value, answer }) {
+  const result = checkGuess(value, answer);
+
+  function Cell({ num, letter, status }) {
+    const cellClass = status ? `cell ${status} num-${num}` : `cell`;
+    return (
+      <span className={cellClass} style={{ animationDelay: `${num * 200}ms` }}>
+        {letter}
+      </span>
+    );
+  }
 
   return (
     <p className='guess'>
       {range(5).map((num) => (
-        <span
+        <Cell
           key={num}
-          className={
-            guessResultsWordStatus
-              ? `cell ${guessResultsWordStatus[num].status} num-${num}`
-              : 'cell'
-          }
-          style={{ animationDelay: `${num * 200}ms` }}
-        >
-          {guessResultsWord ? guessResultsWord[num] : undefined}
-        </span>
+          num={num}
+          letter={result ? result[num].letter : undefined}
+          status={result ? result[num].status : undefined}
+        />
       ))}
     </p>
   );
 }
+);
 
 export default Guess;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-function GuessInput({ handleGuessResult, handleCheckGuess, gameStatus }) {
-  const [guess, setGuess] = React.useState('');
+function GuessInput({ handleSubmitGuess, gameStatus }) {
+  const [tentativeGuess, setTenativeGuess] = React.useState('');
 
   const inputRef = React.useRef();
 
@@ -11,9 +11,8 @@ function GuessInput({ handleGuessResult, handleCheckGuess, gameStatus }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    handleGuessResult(guess);
-    handleCheckGuess(guess);
-    setGuess('');
+    handleSubmitGuess(tentativeGuess);
+    setTenativeGuess('');
   }
 
   return (
@@ -21,18 +20,19 @@ function GuessInput({ handleGuessResult, handleCheckGuess, gameStatus }) {
       <form className='guess-input-wrapper' onSubmit={handleSubmit}>
         <label htmlFor='guess-input'>Enter Guess:</label>
         <input
-          ref={inputRef}
+          title='5 Letter Word'
           id='guess-input'
           type='text'
           required
           pattern='[a-zA-Z]{5}'
           maxLength={5}
-          value={guess}
-          onChange={(event) => {
-            setGuess(event.target.value.toUpperCase());
-          }}
           disabled={gameStatus !== 'running'}
-          title='5 Letter Word'
+          ref={inputRef}
+          value={tentativeGuess}
+          onChange={(event) => {
+            const nextTentativeGuess = event.target.value.toUpperCase();
+            setTenativeGuess(nextTentativeGuess);
+          }}
         />
       </form>
     </>
