@@ -1,2 +1,2 @@
-export * from "./LostBanner";
-export { default } from "./LostBanner";
+export * from './LostBanner';
+export { default } from './LostBanner';

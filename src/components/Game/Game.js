@@ -10,16 +10,14 @@ import { checkGuess } from '../../game-helpers';
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 
 function Game() {
-  // Picks a random word on every pageload.
-  const [gameWord, setGameWord] = React.useState(() => sample(WORDS));
+  const [gameWord, setGameWord] = React.useState(() => sample(WORDS)); // Picks a random word on every pageload.
   const [guessResults, setGuessResults] = React.useState([]);
   const [checkedGuesses, setCheckedGuesses] = React.useState([]);
   const [numOfGuesses, setNumOfGuesses] = React.useState(0);
-  // running / won / lost
-  const [gameStatus, setGameStatus] = React.useState('running');
+  const [gameStatus, setGameStatus] = React.useState('running'); // running / won / lost
 
+  // Logging solution in the console to make debugging easier.
   React.useEffect(() => {
-    // Loggin solution in the console to make debugging easier.
     console.info({ gameWord });
   }, [gameWord]);
 
