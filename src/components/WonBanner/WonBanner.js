@@ -1,13 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import Banner from "../Banner";
+import Banner from '../Banner';
+import RestartButton from '../RestartButton';
 
 function WonBanner({ numOfGuesses, handleGameRestart }) {
-    const buttonRef = React.useRef();
+  const ref = React.useRef(null);
 
-    React.useEffect(() => {
-      buttonRef.current.focus();
-    }, []);
+  React.useEffect(() => {
+    ref.current.focus();
+  }, []);
 
   return (
     <Banner status='happy'>
@@ -24,9 +25,7 @@ function WonBanner({ numOfGuesses, handleGameRestart }) {
           </strong>
           .
         </p>
-        <button type='submit' ref={buttonRef}>
-          Restart game?
-        </button>
+        <RestartButton ref={ref} />
       </form>
     </Banner>
   );
